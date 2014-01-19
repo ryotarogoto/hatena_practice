@@ -5,5 +5,5 @@ use Data::Dumper;
 
 use lib::Parser;
 
-my $parser = Parser->new( filename => 'log.ltsv' );
+my $parser = Parser->new( filename => 'ltsv.log' );
 warn Dumper $parser->parse;
