@@ -22,10 +22,10 @@ sub parse {
     }
     $fh->close;
     for my $line (@out) {
-        push @obj_log, %{ $line };
+        push @obj_log, bless $line, "Log";
     }
 
-    return @obj_log;
+    return \@obj_log;
 }
 
 sub parse_line {
