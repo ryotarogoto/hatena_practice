@@ -14,21 +14,29 @@ sub new {
 sub parse {
     my $self = shift;
     my @out;
-    my @splitted_line;
+    my @obj_log;
     open my $fh, '<', $self->{filename} or die $!;
     my @lines = <$fh>;
     for my $line (@lines) {
-        chomp $line;
-        @splitted_line = split /\s{2,}/, $line;
-        for my $tmp (@splitted_line) {
-            push @out, split /:/, $tmp, 2;
-        }
+        push @out, $self->parse_line( $line );
     }
     $fh->close;
-    my $num_rows = @splitted_line;
-    my %out = { @out };
+    for my $line (@out) {
+        push @obj_log, %{ $line };
+    }
 
-    return %out;
+    return @obj_log;
+}
+
+sub parse_line {
+    my ($self, $line) = @_;
+    my %kv;
+    chomp $line;
+    for (map { [ split /:/, $_, 2 ] } split /\s{2,}/, $line) {
+        $kv{$_->[0]} = $_->[1];
+    }
+
+    return \%kv
 }
 
 1;
